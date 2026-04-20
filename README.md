@@ -34,8 +34,8 @@ In Development (Final Year Project)
 ## 📍 Location
 Mogadishu, Somalia
 
-## 👨‍💻 Authors
-- Your Team Members (Add later)
+## 👨‍💻 Author
+- Mohamed Suleyman Ibrahim
 
 ## 📄 License
 This project is for academic purposes.
