@@ -3,7 +3,7 @@ import React from "react";
 const testimonials = [
   {
     id: 1,
-    name: "Sarah Johnson",
+    name: "Saida Farah Hassan",
     role: "Verified Buyer",
     image: "https://randomuser.me/api/portraits/women/44.jpg",
     rating: 5,
@@ -12,7 +12,7 @@ const testimonials = [
   },
   {
     id: 2,
-    name: "Michael Chen",
+    name: "Abdirizak Abdi Ali",
     role: "Verified Buyer",
     image: "https://randomuser.me/api/portraits/men/32.jpg",
     rating: 5,
@@ -21,7 +21,7 @@ const testimonials = [
   },
   {
     id: 3,
-    name: "Emily Davis",
+    name: "Deka Ahmed Husein",
     role: "Verified Buyer",
     image: "https://randomuser.me/api/portraits/women/68.jpg",
     rating: 4,
@@ -30,7 +30,7 @@ const testimonials = [
   },
   {
     id: 4,
-    name: "David Wilson",
+    name: "Husni Abdi Weydow",
     role: "Verified Buyer",
     image: "https://randomuser.me/api/portraits/men/75.jpg",
     rating: 5,
@@ -39,7 +39,7 @@ const testimonials = [
   },
   {
     id: 5,
-    name: "Jessica Martinez",
+    name: "Yasmin Mohamed Heyle",
     role: "Verified Buyer",
     image: "https://randomuser.me/api/portraits/women/90.jpg",
     rating: 5,
@@ -48,7 +48,7 @@ const testimonials = [
   },
   {
     id: 6,
-    name: "James Anderson",
+    name: "Hassan Said Ali",
     role: "Verified Buyer",
     image: "https://randomuser.me/api/portraits/men/46.jpg",
     rating: 4,
