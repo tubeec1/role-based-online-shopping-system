@@ -16,6 +16,9 @@ import Orders from "../pages/dashboard/Orders";
 import DashhboardProducts from "../pages/dashboard/DashboardProducts";
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
+import PaymentInstruction from "../pages/public/PaymentInstruction";
+import OrderConfirmation from "../pages/public/OrderConfirmation";
+import TrackOrder from "../pages/public/TrackOrder";
 
 let appRoutes = createBrowserRouter([
   {
@@ -41,6 +44,18 @@ let appRoutes = createBrowserRouter([
       {
         path: "checkout",
         element: <Checkout />,
+      },
+      {
+        path: "/payment-instructions",
+        element: <PaymentInstruction />,
+      },
+      {
+        path: "/order-confirmation",
+        element: <OrderConfirmation />,
+      },
+      {
+        path: "/track-order",
+        element: <TrackOrder />,
       },
       {
         path: "signup",
