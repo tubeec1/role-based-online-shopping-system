@@ -8,9 +8,9 @@ import Signup from "../pages/public/Signup";
 import Login from "../pages/public/Login";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../pages/dashboard/Dashboard";
-import Categories from "../pages/dashboard/Categories";
+
 import Users from "../pages/dashboard/Users";
-import Permissions from "../pages/dashboard/Permissions";
+
 import Payments from "../pages/dashboard/Payments";
 import Orders from "../pages/dashboard/Orders";
 import DashhboardProducts from "../pages/dashboard/DashboardProducts";
@@ -19,6 +19,12 @@ import { createBrowserRouter } from "react-router-dom";
 import PaymentInstruction from "../pages/public/PaymentInstruction";
 import OrderConfirmation from "../pages/public/OrderConfirmation";
 import TrackOrder from "../pages/public/TrackOrder";
+import DashboardProducts from "../pages/dashboard/DashboardProducts";
+import Profile from "../pages/dashboard/Profile";
+import MyOrders from "../pages/dashboard/MyOrders";
+import Reports from "../pages/dashboard/Reports";
+import Categories from "../pages/dashboard/Categories";
+import Setting from "../pages/dashboard/Setting";
 
 let appRoutes = createBrowserRouter([
   {
@@ -77,27 +83,39 @@ let appRoutes = createBrowserRouter([
       },
       {
         path: "products",
-        element: <DashhboardProducts />,
+        element: <DashboardProducts />,
       },
       {
-        path: "categories",
-        element: <Categories />,
-      },
-      {
-        path: "users",
-        element: <Users />,
-      },
-      {
-        path: "permissions",
-        element: <Permissions />,
+        path: "orders",
+        element: <Orders />,
       },
       {
         path: "payments",
         element: <Payments />,
       },
       {
-        path: "orders",
-        element: <Orders />,
+        path: "users",
+        element: <Users />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: "my-orders",
+        element: <MyOrders />,
+      },
+      {
+        path: "categories",
+        element: <Categories />,
+      },
+      {
+        path: "reports",
+        element: <Reports />,
+      },
+      {
+        path: "settings",
+        element: <Setting />,
       },
     ],
   },

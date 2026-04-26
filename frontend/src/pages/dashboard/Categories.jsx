@@ -1,7 +1,7 @@
 import React from "react";
 
 const Categories = () => {
-  return <div>Categories page in dashboard</div>;
+  return <div>categories</div>;
 };
 
 export default Categories;
