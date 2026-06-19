@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../app/controllers/TestController.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/CategoryController.php';
+require_once __DIR__ . '/../app/controllers/ProductController.php';
 
 $routes = [
 
@@ -26,7 +27,15 @@ $routes = [
         '/api/categories/show/{id}' => [
             CategoryController::class,
             'show'
-        ]
+        ],
+        '/api/products' => [
+            ProductController::class,
+            'getAll'
+        ],
+        '/api/products/show/{id}' => [
+            ProductController::class,
+            'show'
+        ],
 
     ],
 
@@ -55,15 +64,31 @@ $routes = [
             CategoryController::class,
             'update'
         ],
+        '/api/products/create' => [
+            ProductController::class,
+            'create'
+        ],
+        '/api/products/update/{id}' => [
+            ProductController::class,
+            'update'
+        ],
 
     ],
     'DELETE' => [
+        '/api/categories/delete/{id}' => [
+            CategoryController::class,
+            'delete'
+        ],
+        '/api/products/delete/{id}' => [
+                ProductController::class,
+                'delete'
+        ]
+    
+  
 
-    '/api/categories/delete/{id}' => [
-        CategoryController::class,
-        'delete'
+       
+
+
     ]
-
-]
 
 ];
