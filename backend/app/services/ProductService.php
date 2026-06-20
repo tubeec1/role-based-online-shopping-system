@@ -402,4 +402,84 @@ public function delete($id)
             "Product deleted successfully"
     ];
 }
+
+public function searchProducts()
+{
+    $keyword =
+        $_GET['q']
+        ?? '';
+
+    $products =
+        $this->productModel
+             ->searchProducts(
+                 $keyword
+             );
+
+    return [
+
+        "success" => true,
+
+        "message" =>
+            "Products Retrieved Successfully",
+
+        "data" =>
+            $products
+    ];
+}
+
+public function getProductsByCategoryName($categoryName)
+{
+    $products =
+        $this->productModel
+             ->getProductsByCategoryName(
+                 $categoryName
+             );
+
+    return [
+
+        "success" => true,
+
+        "message" =>
+            "Category Products Retrieved Successfully",
+
+        "data" =>
+            $products
+    ];
+}
+
+public function latestProducts()
+{
+    $products =
+        $this->productModel
+             ->getLatestProducts();
+
+    return [
+
+        "success" => true,
+
+        "message" =>
+            "Latest Products Retrieved Successfully",
+
+        "data" =>
+            $products
+    ];
+}
+
+public function lowStockProducts()
+{
+    $products =
+        $this->productModel
+             ->getLowStockProducts();
+
+    return [
+
+        "success" => true,
+
+        "message" =>
+            "Low Stock Products Retrieved Successfully",
+
+        "data" =>
+            $products
+    ];
+}
 }

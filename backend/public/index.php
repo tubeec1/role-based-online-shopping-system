@@ -22,6 +22,12 @@ $uri =
         $uri
     );
 
+/*
+|--------------------------------------------------------------------------
+| Exact Route Match
+|--------------------------------------------------------------------------
+*/
+
 if (
     isset(
         $routes[$method][$uri]
@@ -36,65 +42,83 @@ if (
 
     $instance->$action();
 
-} else {
+    exit;
+}
 
-    $matched = false;
+/*
+|--------------------------------------------------------------------------
+| Dynamic Route Match
+|--------------------------------------------------------------------------
+*/
 
-    foreach (
-        $routes[$method] ?? []
-        as $route => $handler
-    ) {
+$matched = false;
 
-        $pattern =
-            preg_replace(
-                '/\{[a-zA-Z]+\}/',
-                '([0-9]+)',
-                $route
-            );
+foreach (
+    $routes[$method] ?? []
+    as $route => $handler
+) {
 
-        $pattern =
-            "#^" .
-            $pattern .
-            "$#";
-
-        if (
-            preg_match(
-                $pattern,
-                $uri,
-                $matches
-            )
-        ) {
-
-            array_shift(
-                $matches
-            );
-
-            [$controller, $action] =
-                $handler;
-
-            $instance =
-                new $controller();
-
-            $instance->$action(
-                ...$matches
-            );
-
-            $matched = true;
-
-            break;
-        }
-    }
-
-    if (!$matched) {
-
-        http_response_code(
-            404
+    $pattern =
+        preg_replace(
+            '/\{[a-zA-Z_]+\}/',
+            '([^/]+)',
+            $route
         );
 
-        echo json_encode([
-            "success" => false,
-            "message" => "Route Not Found",
-            "requested_uri" => $uri
-        ]);
+    $pattern =
+        "#^" .
+        $pattern .
+        "$#";
+
+    if (
+        preg_match(
+            $pattern,
+            $uri,
+            $matches
+        )
+    ) {
+
+        array_shift(
+            $matches
+        );
+
+        [$controller, $action] =
+            $handler;
+
+        $instance =
+            new $controller();
+
+        call_user_func_array(
+            [$instance, $action],
+            $matches
+        );
+
+        $matched = true;
+
+        break;
     }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Route Not Found
+|--------------------------------------------------------------------------
+*/
+
+if (!$matched) {
+
+    http_response_code(
+        404
+    );
+
+    echo json_encode([
+
+        "success" => false,
+
+        "message" =>
+            "Route Not Found",
+
+        "requested_uri" =>
+            $uri
+    ]);
 }

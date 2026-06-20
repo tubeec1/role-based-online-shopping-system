@@ -86,4 +86,22 @@ public function delete($id)
 
     return $stmt->execute([$id]);
 }
+
+public function searchCategories($keyword)
+{
+    $stmt = $this->db->prepare(
+        "SELECT *
+         FROM categories
+         WHERE name LIKE ?
+         ORDER BY id DESC"
+    );
+
+    $stmt->execute([
+        '%' . $keyword . '%'
+    ]);
+
+    return $stmt->fetchAll(
+        PDO::FETCH_ASSOC
+    );
+}
 }

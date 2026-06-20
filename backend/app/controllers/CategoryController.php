@@ -89,4 +89,16 @@ public function delete($id)
         $result
     );
 }
+
+
+public function search()
+{
+    $result =
+        $this->categoryService
+             ->searchCategories();
+
+    echo json_encode(
+        $result
+    );
+}
 }

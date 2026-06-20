@@ -282,4 +282,28 @@ public function delete($id)
             "Category deleted successfully"
     ];
 }
+
+public function searchCategories()
+{
+    $keyword =
+        $_GET['q']
+        ?? '';
+
+    $categories =
+        $this->categoryModel
+             ->searchCategories(
+                 $keyword
+             );
+
+    return [
+
+        "success" => true,
+
+        "message" =>
+            "Categories Retrieved Successfully",
+
+        "data" =>
+            $categories
+    ];
+}
 }

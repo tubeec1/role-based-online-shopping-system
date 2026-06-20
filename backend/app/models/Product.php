@@ -136,4 +136,125 @@ public function delete($id)
 
     return $stmt->execute([$id]);
 }
+
+public function findProductById($id)
+{
+    $stmt = $this->db->prepare(
+        "SELECT *
+         FROM products
+         WHERE id = ?"
+    );
+
+    $stmt->execute([$id]);
+
+    return $stmt->fetch(
+        PDO::FETCH_ASSOC
+    );
+}
+
+public function updateStock($productId, $newStock)
+{
+    $stmt = $this->db->prepare(
+        "UPDATE products
+         SET stock = ?
+         WHERE id = ?"
+    );
+
+    return $stmt->execute([
+        $newStock,
+        $productId
+    ]);
+}
+
+public function searchProducts($keyword)
+{
+    $stmt = $this->db->prepare(
+        "SELECT
+            p.*,
+            c.name AS category_name,
+            c.description AS category_description,
+            c.image AS category_image
+         FROM products p
+         INNER JOIN categories c
+            ON p.category_id = c.id
+         WHERE p.name LIKE ?
+         ORDER BY p.id DESC"
+    );
+
+    $stmt->execute([
+        '%' . $keyword . '%'
+    ]);
+
+    return $stmt->fetchAll(
+        PDO::FETCH_ASSOC
+    );
+}
+
+public function getProductsByCategoryName($categoryName)
+{
+    $stmt = $this->db->prepare(
+        "SELECT
+            p.*,
+            c.name AS category_name,
+            c.description AS category_description,
+            c.image AS category_image
+         FROM products p
+         INNER JOIN categories c
+            ON p.category_id = c.id
+         WHERE c.name LIKE ?
+         ORDER BY p.id DESC"
+    );
+
+    $stmt->execute([
+        '%' . $categoryName . '%'
+    ]);
+
+    return $stmt->fetchAll(
+        PDO::FETCH_ASSOC
+    );
+}
+
+public function getLatestProducts()
+{
+    $stmt = $this->db->prepare(
+        "SELECT
+            p.*,
+            c.name AS category_name,
+            c.description AS category_description,
+            c.image AS category_image
+         FROM products p
+         INNER JOIN categories c
+            ON p.category_id = c.id
+         ORDER BY p.created_at DESC
+         LIMIT 6"
+    );
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(
+        PDO::FETCH_ASSOC
+    );
+}
+
+public function getLowStockProducts()
+{
+    $stmt = $this->db->prepare(
+        "SELECT
+            p.*,
+            c.name AS category_name,
+            c.description AS category_description,
+            c.image AS category_image
+         FROM products p
+         INNER JOIN categories c
+            ON p.category_id = c.id
+         WHERE p.stock <= 10
+         ORDER BY p.stock ASC"
+    );
+
+    $stmt->execute();
+
+    return $stmt->fetchAll(
+        PDO::FETCH_ASSOC
+    );
+}
 }

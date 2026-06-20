@@ -4,6 +4,8 @@ require_once __DIR__ . '/../app/controllers/TestController.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/CategoryController.php';
 require_once __DIR__ . '/../app/controllers/ProductController.php';
+require_once __DIR__ . '/../app/controllers/OrderController.php';
+require_once __DIR__ . '/../app/controllers/DashboardController.php';
 
 $routes = [
 
@@ -36,6 +38,43 @@ $routes = [
             ProductController::class,
             'show'
         ],
+        '/api/orders/my-orders' => [
+            OrderController::class,
+            'myOrders'
+        ],
+        '/api/orders/show/{id}' => [
+            OrderController::class,
+            'show'
+        ],
+        '/api/orders' => [
+            OrderController::class,
+            'getAll'
+        ],
+        '/api/dashboard/stats' => [
+            DashboardController::class,
+            'stats'
+        ],
+        '/api/products/search' => [
+            ProductController::class,
+            'search'
+        ],
+        '/api/products/category/{name}' => [
+            ProductController::class,
+            'getByCategory'
+        ],
+        '/api/products/latest' => [
+            ProductController::class,
+            'latest'
+        ],
+        '/api/products/low-stock' => [
+            ProductController::class,
+            'lowStock'
+        ],
+        '/api/categories/search' => [
+            CategoryController::class,
+            'search'
+        ],
+
 
     ],
 
@@ -71,6 +110,14 @@ $routes = [
         '/api/products/update/{id}' => [
             ProductController::class,
             'update'
+        ],
+        '/api/orders/create' => [
+            OrderController::class,
+            'create'
+        ],
+        '/api/orders/update-status/{id}' => [
+            OrderController::class,
+            'updateStatus'
         ],
 
     ],

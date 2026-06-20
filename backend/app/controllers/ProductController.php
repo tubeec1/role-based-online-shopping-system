@@ -88,4 +88,69 @@ public function delete($id)
         $result
     );
 }
+
+public function search()
+{
+    $result =
+        $this->productService
+             ->searchProducts();
+
+    echo json_encode(
+        $result
+    );
+}
+public function getByCategory($categoryName)
+{
+    $result =
+        $this->productService
+             ->getProductsByCategoryName(
+                 $categoryName
+             );
+
+    echo json_encode(
+        $result
+    );
+}
+
+public function latest()
+{
+    $result =
+        $this->productService
+             ->latestProducts();
+
+    echo json_encode(
+        $result
+    );
+}
+
+public function lowStock()
+{
+    $decoded =
+        AuthMiddleware::handle();
+
+    if (
+        !in_array(
+            $decoded->role_id,
+            [1, 2]
+        )
+    ) {
+
+        http_response_code(403);
+
+        echo json_encode([
+            "success" => false,
+            "message" => "Access Denied"
+        ]);
+
+        return;
+    }
+
+    $result =
+        $this->productService
+             ->lowStockProducts();
+
+    echo json_encode(
+        $result
+    );
+}
 }
