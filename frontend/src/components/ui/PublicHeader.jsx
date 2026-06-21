@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
 import {
   FiMenu,
   FiX,
@@ -15,6 +17,18 @@ import {
 const PublicHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, token } = useSelector((state) => state.auth);
+  const cartItems = useSelector((state) => state.cart.cartItems || []);
+  let cartCount = cartItems.length || 0;
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,7 +83,7 @@ const PublicHeader = () => {
           >
             <FiShoppingCart className="text-orange-500 text-2xl" />
             <span className="text-slate-800 text-xl font-bold tracking-tight">
-              ShopEase
+              Miro Market
             </span>
           </Link>
           <button
@@ -127,8 +141,38 @@ const PublicHeader = () => {
           </ul>
 
           <div className="mt-4 pt-4 border-t">
-            <ul className="space-y-1">
-              <li>
+            {token && user ? (
+              <>
+                {(user.role_id === 1 || user.role_id === 2) && (
+                  <Link
+                    to="/dashboard"
+                    onClick={closeMenu}
+                    className="block px-4 py-3 rounded-lg hover:bg-gray-100"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+
+                <Link
+                  to="/profile"
+                  onClick={closeMenu}
+                  className="block px-4 py-3 rounded-lg hover:bg-gray-100"
+                >
+                  Profile
+                </Link>
+
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    closeMenu();
+                  }}
+                  className="w-full text-left px-4 py-3 text-red-600 rounded-lg hover:bg-red-50"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
                 <NavLink
                   to="/login"
                   onClick={closeMenu}
@@ -137,8 +181,7 @@ const PublicHeader = () => {
                   <FiLogIn className="w-5 h-5" />
                   <span>Login</span>
                 </NavLink>
-              </li>
-              <li>
+
                 <NavLink
                   to="/signup"
                   onClick={closeMenu}
@@ -147,8 +190,8 @@ const PublicHeader = () => {
                   <FiUserPlus className="w-5 h-5" />
                   <span>Signup</span>
                 </NavLink>
-              </li>
-            </ul>
+              </>
+            )}
           </div>
 
           <div className="mt-auto pt-6 border-t">
@@ -169,7 +212,7 @@ const PublicHeader = () => {
         <Link to="/" className="flex items-center gap-2 flex-shrink-0">
           <FiShoppingCart className="text-orange-500 text-2xl" />
           <span className="text-slate-800 text-xl font-bold tracking-tight">
-            ShopEase
+            Miro Market
           </span>
         </Link>
 
@@ -194,9 +237,11 @@ const PublicHeader = () => {
             className="relative p-2 text-gray-700 hover:text-orange-500 transition-colors duration-200"
           >
             <FiShoppingCart className="text-xl" />
-            <span className="absolute top-0.5 right-0.5 bg-orange-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-              3
-            </span>
+            {cartCount > 0 && (
+              <span className="absolute top-0.5 right-0.5 bg-orange-500 text-white text-[10px] font-bold min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full">
+                {cartCount}
+              </span>
+            )}
           </Link>
 
           <Link
@@ -213,20 +258,72 @@ const PublicHeader = () => {
             <FiUser className="text-xl" />
           </Link>
 
-          <div className="flex items-center gap-2 ml-2 border-l pl-4">
-            <Link
-              to="/login"
-              className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:border-orange-500 hover:text-orange-500 transition-all duration-200"
-            >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className="px-4 py-2 text-sm font-medium text-white bg-orange-500 rounded-md hover:bg-orange-600 transition-colors duration-200"
-            >
-              Signup
-            </Link>
-          </div>
+          {token && user ? (
+            <div className="relative ml-3">
+              <button
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                className="flex items-center"
+              >
+                <img
+                  src={
+                    user?.profile_image
+                      ? `http://localhost/online-shopping-system/backend/public/${user.profile_image}`
+                      : "https://ui-avatars.com/api/?name=" + user?.full_name
+                  }
+                  alt={user?.full_name}
+                  className="w-10 h-10 rounded-full object-cover border-2 border-orange-500"
+                />
+              </button>
+
+              {showProfileMenu && (
+                <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-lg border z-50">
+                  <div className="px-4 py-3 border-b">
+                    <p className="font-semibold">{user?.full_name}</p>
+                    <p className="text-xs text-gray-500">{user?.email}</p>
+                  </div>
+
+                  {(user?.role_id === 1 || user?.role_id === 2) && (
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-3 hover:bg-gray-50"
+                    >
+                      Dashboard
+                    </Link>
+                  )}
+
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-3 hover:bg-gray-50"
+                  >
+                    Profile
+                  </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 ml-2 border-l pl-4">
+              <Link
+                to="/login"
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:border-orange-500 hover:text-orange-500"
+              >
+                Login
+              </Link>
+
+              <Link
+                to="/signup"
+                className="px-4 py-2 text-sm font-medium text-white bg-orange-500 rounded-md hover:bg-orange-600"
+              >
+                Signup
+              </Link>
+            </div>
+          )}
         </div>
 
         <button

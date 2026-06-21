@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FiMinus,
   FiPlus,
@@ -6,208 +6,232 @@ import {
   FiZap,
   FiTruck,
   FiCheckCircle,
-  FiStar,
-  FiHeart,
+  FiArrowLeft,
 } from "react-icons/fi";
 
-const product = {
-  id: 1,
-  name: "Premium Wireless Headphones",
-  category: "Electronics",
-  price: 129.99,
-  oldPrice: 179.99,
-  description:
-    "Experience unparalleled audio quality with advanced noise-cancellation and 30-hour battery life.",
-  specs: [
-    { label: "Brand", value: "AudioPro" },
-    { label: "Model", value: "AP-X900" },
-    { label: "Connectivity", value: "Bluetooth 5.2" },
-    { label: "Battery", value: "30 Hours" },
-  ],
-  images: [
-    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800",
-    "https://images.unsplash.com/photo-1583394838336-acd977736f90?q=80&w=800",
-  ],
-  rating: 4.5,
-  reviews: 124,
-  stock: 15,
-};
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../features/cart/cartSlice";
 
-let ProductDetails = () => {
-  const [selectedImage, setSelectedImage] = useState(0);
+import api from "../../api/axios";
+
+const ProductDetails = () => {
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const [product, setProduct] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState("description");
 
-  const discount =
-    product.oldPrice &&
-    Math.round((1 - product.price / product.oldPrice) * 100);
+  const fetchProduct = async () => {
+    try {
+      const response = await api.get(`/api/products/show/${id}`);
+
+      setProduct(response.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProduct();
+  }, [id]);
+
+  const imageUrl = (image) => {
+    if (!image) {
+      return "https://via.placeholder.com/600x400";
+    }
+
+    return `http://localhost/online-shopping-system/backend/public/${image}`;
+  };
+
+  const handleAddToCart = () => {
+    for (let i = 0; i < quantity; i++) {
+      dispatch(addToCart(product));
+    }
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+
+    navigate("/cart");
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        Loading Product...
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        Product Not Found
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-10">
-        {/* GRID */}
-        <div className="grid lg:grid-cols-2 gap-10">
-          {/* IMAGES */}
-          <div>
-            <div className="relative rounded-2xl overflow-hidden bg-white shadow-sm group">
-              <img
-                src={product.images[selectedImage]}
-                alt=""
-                className="w-full h-[400px] object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 mb-8 text-orange-500 hover:text-orange-600"
+        >
+          <FiArrowLeft />
+          Back
+        </button>
 
-              {discount && (
-                <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs px-3 py-1 rounded-lg font-semibold">
-                  -{discount}%
-                </span>
-              )}
-
-              <button className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:text-red-500">
-                <FiHeart />
-              </button>
-            </div>
-
-            {/* THUMBNAILS */}
-            <div className="flex gap-3 mt-4">
-              {product.images.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  onClick={() => setSelectedImage(i)}
-                  className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${
-                    selectedImage === i
-                      ? "border-orange-500"
-                      : "border-transparent opacity-60"
-                  }`}
-                />
-              ))}
-            </div>
+        <div className="grid lg:grid-cols-2 gap-12">
+          {/* Product Image */}
+          <div className="bg-white rounded-3xl overflow-hidden shadow-lg">
+            <img
+              src={imageUrl(product.image)}
+              alt={product.name}
+              className="w-full h-[500px] object-cover"
+            />
           </div>
 
-          {/* DETAILS */}
+          {/* Product Information */}
           <div>
-            <p className="text-orange-500 text-sm font-semibold uppercase">
-              {product.category}
-            </p>
+            <span className="inline-block px-4 py-2 bg-orange-100 text-orange-600 rounded-full text-sm font-medium">
+              {product.category?.name}
+            </span>
 
-            <h1 className="text-3xl font-bold text-blue-950 mt-2">
+            <h1 className="text-4xl font-bold text-gray-900 mt-4">
               {product.name}
             </h1>
 
-            {/* RATING */}
-            <div className="flex items-center gap-2 mt-3">
-              {[...Array(5)].map((_, i) => (
-                <FiStar
-                  key={i}
-                  className={`${
-                    i < Math.floor(product.rating)
-                      ? "text-amber-400 fill-amber-400"
-                      : "text-gray-300"
-                  }`}
-                />
-              ))}
-              <span className="text-sm text-gray-500">({product.reviews})</span>
-            </div>
-
-            {/* PRICE */}
-            <div className="flex items-center gap-3 mt-6">
-              <span className="text-3xl font-bold text-orange-500">
+            <div className="mt-6">
+              <span className="text-5xl font-bold text-orange-500">
                 ${product.price}
               </span>
-              {product.oldPrice && (
-                <span className="line-through text-gray-400">
-                  ${product.oldPrice}
-                </span>
-              )}
             </div>
 
-            <p className="text-gray-600 mt-4">{product.description}</p>
+            <div className="mt-6">
+              <p className="text-gray-600 leading-relaxed">
+                {product.description}
+              </p>
+            </div>
 
-            {/* QUANTITY */}
-            <div className="flex items-center gap-4 mt-6">
-              <div className="flex border rounded-lg overflow-hidden">
+            <div className="mt-6">
+              <span
+                className={`px-4 py-2 rounded-full text-sm font-medium ${
+                  product.stock > 0
+                    ? "bg-green-100 text-green-600"
+                    : "bg-red-100 text-red-600"
+                }`}
+              >
+                {product.stock > 0
+                  ? `${product.stock} In Stock`
+                  : "Out Of Stock"}
+              </span>
+            </div>
+
+            {/* Quantity */}
+            <div className="mt-8">
+              <h3 className="font-semibold mb-3">Quantity</h3>
+
+              <div className="flex items-center border rounded-xl w-fit overflow-hidden">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-3 py-2 hover:bg-gray-100"
+                  className="px-4 py-3 hover:bg-gray-100"
                 >
                   <FiMinus />
                 </button>
-                <span className="px-4 py-2">{quantity}</span>
+
+                <span className="px-6">{quantity}</span>
+
                 <button
                   onClick={() =>
                     setQuantity(Math.min(product.stock, quantity + 1))
                   }
-                  className="px-3 py-2 hover:bg-gray-100"
+                  className="px-4 py-3 hover:bg-gray-100"
                 >
                   <FiPlus />
                 </button>
               </div>
-
-              <span className="text-sm text-green-600 flex items-center gap-1">
-                <FiCheckCircle />
-                In Stock
-              </span>
             </div>
 
-            {/* BUTTONS */}
-            <div className="flex gap-4 mt-6">
-              <button className="flex-1 bg-orange-500 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-orange-600">
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition"
+              >
                 <FiShoppingCart />
-                Add to Cart
+                Add To Cart
               </button>
 
-              <button className="flex-1 bg-blue-950 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-blue-900">
+              <button
+                onClick={handleBuyNow}
+                className="flex-1 bg-gray-900 hover:bg-black text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition"
+              >
                 <FiZap />
                 Buy Now
               </button>
             </div>
 
-            {/* EXTRA INFO */}
-            <div className="mt-6 space-y-2 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <FiTruck />
-                Fast delivery (1–3 days)
+            {/* Extra Information */}
+            <div className="mt-10 space-y-4">
+              <div className="flex items-center gap-3 text-gray-600">
+                <FiTruck className="text-orange-500" />
+                Fast Delivery Available
               </div>
-              <div className="flex items-center gap-2">
-                <FiCheckCircle />
-                Secure payment
+
+              <div className="flex items-center gap-3 text-gray-600">
+                <FiCheckCircle className="text-green-500" />
+                Secure Payment
+              </div>
+
+              <div className="flex items-center gap-3 text-gray-600">
+                <FiCheckCircle className="text-green-500" />
+                Original Product Guarantee
               </div>
             </div>
           </div>
         </div>
 
-        {/* TABS */}
-        <div className="mt-12 bg-white rounded-xl p-6 shadow-sm">
-          <div className="flex gap-6 border-b mb-6">
-            {["description", "specs"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`pb-2 ${
-                  activeTab === tab
-                    ? "border-b-2 border-orange-500 text-orange-500"
-                    : "text-gray-400"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+        {/* Product Information Section */}
+        <div className="bg-white rounded-3xl p-8 mt-12 shadow">
+          <h2 className="text-2xl font-bold mb-5">Product Description</h2>
 
-          {activeTab === "description" && (
-            <p className="text-gray-600">{product.description}</p>
-          )}
+          <p className="text-gray-600 leading-relaxed">{product.description}</p>
 
-          {activeTab === "specs" && (
-            <div className="space-y-2">
-              {product.specs.map((s, i) => (
-                <div key={i} className="flex justify-between">
-                  <span className="text-gray-500">{s.label}</span>
-                  <span className="font-medium">{s.value}</span>
-                </div>
-              ))}
+          <div className="grid md:grid-cols-2 gap-6 mt-8">
+            <div>
+              <h3 className="font-semibold mb-2">Product ID</h3>
+
+              <p className="text-gray-500">#{product.id}</p>
             </div>
-          )}
+
+            <div>
+              <h3 className="font-semibold mb-2">Category</h3>
+
+              <p className="text-gray-500">{product.category?.name}</p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-2">Available Stock</h3>
+
+              <p className="text-gray-500">{product.stock}</p>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-2">Added On</h3>
+
+              <p className="text-gray-500">{product.created_at}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

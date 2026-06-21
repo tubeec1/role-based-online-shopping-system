@@ -6,6 +6,7 @@ import Cart from "../pages/public/Cart";
 import Checkout from "../pages/public/Checkout";
 import Signup from "../pages/public/Signup";
 import Login from "../pages/public/Login";
+import CategoryDetails from "../pages/public/CategoryDetails";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../pages/dashboard/Dashboard";
 
@@ -16,8 +17,7 @@ import Orders from "../pages/dashboard/Orders";
 import DashhboardProducts from "../pages/dashboard/DashboardProducts";
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
-import PaymentInstruction from "../pages/public/PaymentInstruction";
-import OrderConfirmation from "../pages/public/OrderConfirmation";
+
 import TrackOrder from "../pages/public/TrackOrder";
 import DashboardProducts from "../pages/dashboard/DashboardProducts";
 import Profile from "../pages/dashboard/Profile";
@@ -40,8 +40,12 @@ let appRoutes = createBrowserRouter([
         element: <PublicProducts />,
       },
       {
-        path: "product-details",
+        path: "product-details/:id",
         element: <ProductDetails />,
+      },
+      {
+        path: "category-details/:categoryName",
+        element: <CategoryDetails />,
       },
       {
         path: "cart",
@@ -51,14 +55,7 @@ let appRoutes = createBrowserRouter([
         path: "checkout",
         element: <Checkout />,
       },
-      {
-        path: "/payment-instructions",
-        element: <PaymentInstruction />,
-      },
-      {
-        path: "/order-confirmation",
-        element: <OrderConfirmation />,
-      },
+
       {
         path: "/track-order",
         element: <TrackOrder />,
