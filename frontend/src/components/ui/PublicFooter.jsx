@@ -38,7 +38,7 @@ let PublicFooter = () => {
             <a href="#" className="flex items-center gap-2 mb-5">
               <FiShoppingCart className="text-orange-500 text-2xl" />
               <span className="text-xl font-bold text-blue-950 tracking-tight">
-                ShopEase
+                Miro Market
               </span>
             </a>
 
@@ -112,7 +112,7 @@ let PublicFooter = () => {
               <li className="flex items-start gap-3">
                 <FiMail className="w-5 h-5 text-orange-500 mt-0.5" />
                 <span className="text-gray-600 text-sm">
-                  support@shopease.com
+                  support@miromarket.com
                 </span>
               </li>
               <li className="flex items-start gap-3">
@@ -132,7 +132,7 @@ let PublicFooter = () => {
         {/* BOTTOM */}
         <div className="border-t border-gray-200 mt-14 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} ShopEase. All rights reserved.
+            © {new Date().getFullYear()} Miro Market. All rights reserved.
           </p>
 
           <div className="flex items-center gap-6">

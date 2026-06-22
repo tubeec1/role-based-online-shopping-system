@@ -26,6 +26,8 @@ import MyOrders from "../pages/dashboard/MyOrders";
 import Reports from "../pages/dashboard/Reports";
 import Categories from "../pages/dashboard/Categories";
 import Setting from "../pages/dashboard/Setting";
+import Customers from "../pages/dashboard/Customers";
+import Staff from "../pages/dashboard/Staff";
 
 let appRoutes = createBrowserRouter([
   {
@@ -111,6 +113,14 @@ let appRoutes = createBrowserRouter([
       {
         path: "categories",
         element: <Categories />,
+      },
+      {
+        path: "customers",
+        element: <Customers />,
+      },
+      {
+        path: "staff",
+        element: <Staff />,
       },
       {
         path: "reports",

@@ -1,56 +1,36 @@
-import React, { useState, useMemo } from "react";
-import { FiShoppingCart, FiSearch } from "react-icons/fi";
+import React, { useEffect, useMemo, useState } from "react";
+import { FiShoppingCart, FiSearch, FiEye, FiPackage } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../../features/products/productSlice";
+import { addToCart } from "../../features/cart/cartSlice";
+import { useNavigate } from "react-router-dom";
 
-const mockProducts = [
-  {
-    id: 1,
-    name: "Premium Wireless Headphones",
-    description:
-      "Noise-cancelling over-ear headphones with 30-hour battery life.",
-    price: 129.99,
-    oldPrice: 179.99,
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=600&auto=format&fit=crop",
-    category: "Electronics",
-  },
-  {
-    id: 2,
-    name: "Minimalist Leather Backpack",
-    description: "Water-resistant backpack with padded laptop compartment.",
-    price: 89.0,
-    oldPrice: null,
-    image:
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=600&auto=format&fit=crop",
-    category: "Fashion",
-  },
-  {
-    id: 3,
-    name: "Smart Fitness Watch Pro",
-    description:
-      "Track your health, heart rate, and daily workouts seamlessly.",
-    price: 249.99,
-    oldPrice: 299.99,
-    image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=600&auto=format&fit=crop",
-    category: "Electronics",
-  },
-];
+const PublicProducts = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-let PublicProducts = () => {
-  const [products] = useState(mockProducts);
+  const { products, loading } = useSelector((state) => state.products);
+
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 🔥 Derived data (optimized)
-  const categories = useMemo(
-    () => ["All", ...new Set(products.map((p) => p.category))],
-    [products],
-  );
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
+
+  const categories = useMemo(() => {
+    return [
+      "All",
+      ...new Set(
+        products.map((product) => product.category?.name).filter(Boolean),
+      ),
+    ];
+  }, [products]);
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       const matchesCategory =
-        activeCategory === "All" || product.category === activeCategory;
+        activeCategory === "All" || product.category?.name === activeCategory;
 
       const matchesSearch =
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -60,31 +40,37 @@ let PublicProducts = () => {
     });
   }, [products, activeCategory, searchQuery]);
 
-  // 🔥 Ready for real cart logic
+  const imageUrl = (image) => {
+    return `http://localhost/online-shopping-system/backend/public/${image}`;
+  };
+
   const handleAddToCart = (product) => {
-    console.log("Add to cart:", product);
-    // later:
-    // addToCart(product)
+    dispatch(addToCart(product));
   };
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* HEADER */}
+        {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-blue-950">
+          <p className="text-orange-500 font-semibold uppercase tracking-widest">
+            Shop Collection
+          </p>
+
+          <h1 className="text-4xl font-extrabold text-blue-950 mt-2">
             Our Products
           </h1>
+
           <p className="mt-3 text-gray-500 text-lg">
             Discover high-quality products curated just for you
           </p>
         </div>
 
-        {/* SEARCH + FILTER */}
-        <div className="bg-white p-5 rounded-2xl border mb-10 flex flex-col lg:flex-row gap-5 items-center justify-between">
-          {/* SEARCH */}
+        {/* Search & Filter */}
+        <div className="bg-white rounded-2xl p-5 border mb-10 flex flex-col lg:flex-row gap-5 justify-between items-center">
           <div className="relative w-full lg:w-96">
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+
             <input
               type="text"
               placeholder="Search products..."
@@ -94,99 +80,111 @@ let PublicProducts = () => {
             />
           </div>
 
-          {/* CATEGORY */}
           <div className="flex flex-wrap gap-2 justify-center">
-            {categories.map((cat) => (
+            {categories.map((category) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 text-sm rounded-lg font-medium transition ${
-                  activeCategory === cat
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                  activeCategory === category
                     ? "bg-orange-500 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
-                {cat}
+                {category}
               </button>
             ))}
           </div>
         </div>
 
-        {/* PRODUCTS */}
-        {filteredProducts.length > 0 ? (
+        {/* Loading */}
+        {loading && (
+          <div className="py-20 text-center">
+            <p className="text-gray-500">Loading products...</p>
+          </div>
+        )}
+
+        {/* Products */}
+        {!loading && filteredProducts.length > 0 && (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredProducts.map((product) => {
-              const discount =
-                product.oldPrice &&
-                Math.round((1 - product.price / product.oldPrice) * 100);
-
-              return (
+            {filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-white rounded-2xl border overflow-hidden group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              >
+                {/* Image */}
                 <div
-                  key={product.id}
-                  className="bg-white rounded-2xl border overflow-hidden group hover:shadow-xl transition"
+                  className="relative h-64 overflow-hidden cursor-pointer"
+                  onClick={() => navigate(`/product-details/${product.id}`)}
                 >
-                  {/* IMAGE */}
-                  <div className="relative h-60 overflow-hidden bg-gray-100">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                    />
+                  <img
+                    src={imageUrl(product.image)}
+                    alt={product.name}
+                    className="w-full h-full object-cover transition duration-500 group-hover:scale-110"
+                  />
 
-                    {discount && (
-                      <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded">
-                        -{discount}%
-                      </span>
-                    )}
+                  <span className="absolute top-3 left-3 bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-semibold">
+                    {product.category?.name}
+                  </span>
+
+                  <span className="absolute top-3 right-3 bg-white shadow text-xs px-3 py-1 rounded-full font-medium">
+                    Stock: {product.stock}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div className="p-5">
+                  <h3
+                    onClick={() => navigate(`/product-details/${product.id}`)}
+                    className="font-bold text-blue-950 text-lg cursor-pointer hover:text-orange-500 transition"
+                  >
+                    {product.name}
+                  </h3>
+
+                  <p className="text-sm text-gray-500 mt-2 line-clamp-2">
+                    {product.description}
+                  </p>
+
+                  <div className="flex items-center justify-between mt-4">
+                    <span className="text-2xl font-bold text-orange-500">
+                      ${Number(product.price).toFixed(2)}
+                    </span>
                   </div>
 
-                  {/* CONTENT */}
-                  <div className="p-5 flex flex-col h-full">
-                    <p className="text-xs text-gray-400 uppercase mb-1">
-                      {product.category}
-                    </p>
+                  <div className="grid grid-cols-2 gap-3 mt-5">
+                    <button
+                      onClick={() => navigate(`/product-details/${product.id}`)}
+                      className="flex items-center justify-center gap-2 py-3 border rounded-xl hover:bg-gray-100 transition"
+                    >
+                      <FiEye />
+                      View
+                    </button>
 
-                    <h3 className="font-bold text-blue-950 line-clamp-1">
-                      {product.name}
-                    </h3>
-
-                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-                      {product.description}
-                    </p>
-
-                    {/* PRICE */}
-                    <div className="flex items-center gap-2 mt-3">
-                      <span className="text-lg font-extrabold text-orange-500">
-                        ${product.price.toFixed(2)}
-                      </span>
-                      {product.oldPrice && (
-                        <span className="text-sm text-gray-400 line-through">
-                          ${product.oldPrice.toFixed(2)}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* BUTTON */}
                     <button
                       onClick={() => handleAddToCart(product)}
-                      className="mt-auto w-full py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition"
+                      className="flex items-center justify-center gap-2 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl transition"
                     >
                       <FiShoppingCart />
-                      Add to Cart
+                      Cart
                     </button>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
-        ) : (
-          <div className="text-center py-20 bg-white rounded-2xl border">
-            <FiSearch className="mx-auto text-gray-300 w-10 h-10 mb-4" />
-            <h3 className="text-xl font-bold text-blue-950">
+        )}
+
+        {/* Empty */}
+        {!loading && filteredProducts.length === 0 && (
+          <div className="bg-white rounded-2xl border py-20 text-center">
+            <FiPackage className="mx-auto text-gray-300 text-5xl mb-4" />
+
+            <h3 className="text-2xl font-bold text-blue-950">
               No products found
             </h3>
+
             <p className="text-gray-500 mt-2">
-              Try adjusting your search or filters
+              Try changing your search or category filter.
             </p>
 
             <button
@@ -194,7 +192,7 @@ let PublicProducts = () => {
                 setSearchQuery("");
                 setActiveCategory("All");
               }}
-              className="mt-5 px-6 py-2 bg-blue-950 text-white rounded-lg"
+              className="mt-5 px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600"
             >
               Reset Filters
             </button>

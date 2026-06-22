@@ -161,6 +161,13 @@ const PublicHeader = () => {
                   Profile
                 </Link>
 
+                <Link
+                  to="/track-order"
+                  onClick={closeMenu}
+                  className="block px-4 py-3 rounded-lg hover:bg-gray-100"
+                >
+                  My Orders
+                </Link>
                 <button
                   onClick={() => {
                     handleLogout();
@@ -245,14 +252,7 @@ const PublicHeader = () => {
           </Link>
 
           <Link
-            to="/checkout"
-            className="p-2 text-gray-700 hover:text-orange-500 transition-colors duration-200"
-          >
-            <FiCreditCard className="text-xl" />
-          </Link>
-
-          <Link
-            to="/login"
+            to="/my-profile"
             className="p-2 text-gray-700 hover:text-orange-500 transition-colors duration-200"
           >
             <FiUser className="text-xl" />
@@ -296,6 +296,12 @@ const PublicHeader = () => {
                     className="block px-4 py-3 hover:bg-gray-50"
                   >
                     Profile
+                  </Link>
+                  <Link
+                    to="/track-order"
+                    className="block px-4 py-3 hover:bg-gray-50"
+                  >
+                    My Orders
                   </Link>
 
                   <button

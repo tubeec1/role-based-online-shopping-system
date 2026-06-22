@@ -11,7 +11,7 @@ export const getDashboardStatistics = createAsyncThunk(
   "dashboard/getDashboardStatistics",
   async (_, thunkAPI) => {
     try {
-      const response = await api.get("/api/dashboard/statistics");
+      const response = await api.get("/api/dashboard/stats");
 
       return response.data;
     } catch (error) {
