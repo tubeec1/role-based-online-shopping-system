@@ -12,9 +12,10 @@ export const getProducts = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await api.get("/api/products");
+
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -33,7 +34,7 @@ export const getProductById = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -52,7 +53,7 @@ export const searchProducts = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -71,7 +72,7 @@ export const getProductsByCategory = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -90,7 +91,7 @@ export const getLatestProducts = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -109,7 +110,7 @@ export const getLowStockProducts = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -132,7 +133,7 @@ export const createProduct = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -155,7 +156,7 @@ export const updateProduct = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -177,7 +178,7 @@ export const deleteProduct = createAsyncThunk(
         ...response.data,
       };
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -195,18 +196,30 @@ const productSlice = createSlice({
     error: null,
   },
 
-  reducers: {},
+  reducers: {
+    clearProductState: (state) => {
+      state.success = false;
+      state.error = null;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
 
+      /*
+      |--------------------------------------------------------------------------
+      | Get Products
+      |--------------------------------------------------------------------------
+      */
+
       .addCase(getProducts.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
 
       .addCase(getProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = action.payload.data;
+        state.products = action.payload.data || [];
       })
 
       .addCase(getProducts.rejected, (state, action) => {
@@ -214,40 +227,133 @@ const productSlice = createSlice({
         state.error = action.payload;
       })
 
+      /*
+      |--------------------------------------------------------------------------
+      | Get Product By ID
+      |--------------------------------------------------------------------------
+      */
+
+      .addCase(getProductById.pending, (state) => {
+        state.loading = true;
+      })
+
       .addCase(getProductById.fulfilled, (state, action) => {
+        state.loading = false;
         state.product = action.payload.data;
       })
 
-      .addCase(searchProducts.fulfilled, (state, action) => {
-        state.products = action.payload.data;
+      .addCase(getProductById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       })
+
+      /*
+      |--------------------------------------------------------------------------
+      | Search Products
+      |--------------------------------------------------------------------------
+      */
+
+      .addCase(searchProducts.fulfilled, (state, action) => {
+        state.products = action.payload.data || [];
+      })
+
+      /*
+      |--------------------------------------------------------------------------
+      | Products By Category
+      |--------------------------------------------------------------------------
+      */
 
       .addCase(getProductsByCategory.fulfilled, (state, action) => {
-        state.products = action.payload.data;
+        state.products = action.payload.data || [];
       })
+
+      /*
+      |--------------------------------------------------------------------------
+      | Latest Products
+      |--------------------------------------------------------------------------
+      */
 
       .addCase(getLatestProducts.fulfilled, (state, action) => {
-        state.latestProducts = action.payload.data;
+        state.latestProducts = action.payload.data || [];
       })
 
+      /*
+      |--------------------------------------------------------------------------
+      | Low Stock Products
+      |--------------------------------------------------------------------------
+      */
+
       .addCase(getLowStockProducts.fulfilled, (state, action) => {
-        state.lowStockProducts = action.payload.data;
+        state.lowStockProducts = action.payload.data || [];
+      })
+
+      /*
+      |--------------------------------------------------------------------------
+      | Create Product
+      |--------------------------------------------------------------------------
+      */
+
+      .addCase(createProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
 
       .addCase(createProduct.fulfilled, (state) => {
+        state.loading = false;
         state.success = true;
+      })
+
+      .addCase(createProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      /*
+      |--------------------------------------------------------------------------
+      | Update Product
+      |--------------------------------------------------------------------------
+      */
+
+      .addCase(updateProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
 
       .addCase(updateProduct.fulfilled, (state) => {
+        state.loading = false;
         state.success = true;
       })
 
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      /*
+      |--------------------------------------------------------------------------
+      | Delete Product
+      |--------------------------------------------------------------------------
+      */
+
+      .addCase(deleteProduct.pending, (state) => {
+        state.loading = true;
+      })
+
       .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.loading = false;
+
         state.products = state.products.filter(
-          (item) => item.id !== action.payload.id,
+          (product) => product.id !== action.payload.id,
         );
+      })
+
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
+
+export const { clearProductState } = productSlice.actions;
 
 export default productSlice.reducer;
