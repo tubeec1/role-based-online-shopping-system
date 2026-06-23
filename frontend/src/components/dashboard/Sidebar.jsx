@@ -44,16 +44,16 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       icon: FiShoppingCart,
       path: "/dashboard/orders",
     },
-    {
-      name: "Customers",
-      icon: FiUsers,
-      path: "/dashboard/customers",
-    },
-    {
-      name: "Staff",
-      icon: FiShield,
-      path: "/dashboard/staff",
-    },
+    // {
+    //   name: "Customers",
+    //   icon: FiUsers,
+    //   path: "/dashboard/customers",
+    // },
+    // {
+    //   name: "Staff",
+    //   icon: FiShield,
+    //   path: "/dashboard/staff",
+    // },
     {
       name: "Reports",
       icon: FiBarChart2,

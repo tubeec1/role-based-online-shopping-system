@@ -60,7 +60,7 @@ export const getOrderDetails = createAsyncThunk(
 
 /*
 |--------------------------------------------------------------------------
-| All Orders (Admin / Staff)
+| All Orders
 |--------------------------------------------------------------------------
 */
 
@@ -119,8 +119,15 @@ const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
+      /*
+      |--------------------------------------------------------------------------
+      | Create Order
+      |--------------------------------------------------------------------------
+      */
+
       .addCase(createOrder.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
 
       .addCase(createOrder.fulfilled, (state, action) => {
@@ -131,25 +138,39 @@ const orderSlice = createSlice({
 
       .addCase(createOrder.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message || "Failed to create order";
       })
+
+      /*
+      |--------------------------------------------------------------------------
+      | My Orders
+      |--------------------------------------------------------------------------
+      */
 
       .addCase(getMyOrders.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
 
       .addCase(getMyOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload.data;
+        state.orders = action.payload.data || [];
       })
 
       .addCase(getMyOrders.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message || "Failed to load orders";
       })
+
+      /*
+      |--------------------------------------------------------------------------
+      | Order Details
+      |--------------------------------------------------------------------------
+      */
 
       .addCase(getOrderDetails.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
 
       .addCase(getOrderDetails.fulfilled, (state, action) => {
@@ -159,35 +180,62 @@ const orderSlice = createSlice({
 
       .addCase(getOrderDetails.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message || "Failed to load order";
       })
+
+      /*
+      |--------------------------------------------------------------------------
+      | Get All Orders
+      |--------------------------------------------------------------------------
+      */
 
       .addCase(getAllOrders.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
 
       .addCase(getAllOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload.data;
+        state.orders = action.payload.data || [];
       })
 
       .addCase(getAllOrders.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message || "Failed to load orders";
       })
+
+      /*
+      |--------------------------------------------------------------------------
+      | Update Order Status
+      |--------------------------------------------------------------------------
+      */
 
       .addCase(updateOrderStatus.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
 
-      .addCase(updateOrderStatus.fulfilled, (state) => {
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
+
+        const updatedOrder = action.payload?.data;
+
+        if (updatedOrder) {
+          state.orders = state.orders.map((order) =>
+            order.order_id === updatedOrder.order_id
+              ? {
+                  ...order,
+                  status: updatedOrder.status,
+                }
+              : order,
+          );
+        }
       })
 
       .addCase(updateOrderStatus.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload?.message || "Failed to update order";
       });
   },
 });

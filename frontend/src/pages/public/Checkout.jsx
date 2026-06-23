@@ -59,7 +59,7 @@ const Checkout = () => {
   useEffect(() => {
     if (success) {
       dispatch(clearCart());
-      navigate("/track-orders");
+      navigate("/track-order");
     }
   }, [success, dispatch, navigate]);
 

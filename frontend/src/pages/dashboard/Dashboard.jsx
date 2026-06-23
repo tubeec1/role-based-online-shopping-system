@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDashboardStatistics } from "../../features/dashboard/dashboardSlice";
 
 import StatsCard from "../../components/dashboard/StatsCard";
+import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -109,10 +111,13 @@ export default function Dashboard() {
         </div>
 
         {user?.role_id === 1 && (
-          <button className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl font-semibold transition">
+          <Link
+            to="/dashboard/reports"
+            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl font-semibold transition"
+          >
             View Reports
             <FiArrowUpRight />
-          </button>
+          </Link>
         )}
       </div>
 
