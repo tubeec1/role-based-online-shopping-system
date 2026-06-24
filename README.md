@@ -278,7 +278,7 @@ Enable:
 Create:
 
 ```sql
-online_shopping_system
+oss
 ```
 
 Import:
