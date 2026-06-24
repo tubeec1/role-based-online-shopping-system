@@ -1,246 +1,248 @@
-# 🛒 Role-Based Online Shopping System for MIRO Market
+# 🛒 Role-Based Online Shopping System
 
-## 📖 Project Overview
+A full-stack E-Commerce Web Application developed as a Final Year Project for the Bachelor of Information Technology program.
 
-The Role-Based Online Shopping System for MIRO Market is a full-stack e-commerce platform designed to modernize product management, customer shopping experiences, and order processing. The system implements Role-Based Access Control (RBAC) to provide different functionalities for Administrators, Staff Members, and Customers.
-
-The project was developed as a Final Year Project and aims to improve business operations through digital transformation by providing a secure, scalable, and user-friendly online shopping environment.
+The system allows customers to browse products, place orders, and submit payment proofs, while administrators and staff manage categories, products, orders, users, and reports through a secure role-based dashboard.
 
 ---
 
-# 🎯 Project Objectives
+# 📌 Project Information
 
-The system was developed to:
+**Project Title:**
+Design and Implementation of a Role-Based Online Shopping System for Miro Market
 
-* Automate product and category management.
-* Enable customers to browse and purchase products online.
-* Manage customer orders efficiently.
-* Implement role-based access control.
-* Generate business reports and sales statistics.
-* Improve customer experience and business efficiency.
+**Developer:**
+Mohamed Suleyman Ibrahim
+
+**Location:**
+Mogadishu, Somalia
+
+**Project Type:**
+Academic Final Year Project
 
 ---
 
-# 🛠 Technology Stack
+# 🛠 Technologies Used
 
 ## Frontend
 
-* React.js
-* Redux Toolkit
-* React Router DOM
-* Axios
-* Tailwind CSS
-* React Hot Toast
-* React Icons
-* Recharts
+- React.js
+- React Router DOM
+- Redux Toolkit
+- Axios
+- Tailwind CSS
+- Recharts
+- React Icons
+- React Hot Toast
 
 ## Backend
 
-* PHP (MVC Architecture)
-* RESTful API
-* JSON Responses
+- PHP MVC Architecture
+- RESTful API
+- JWT Authentication
+- Role-Based Access Control (RBAC)
 
 ## Database
 
-* MySQL
+- MySQL
 
 ## Development Tools
 
-* Visual Studio Code
-* XAMPP
-* Git & GitHub
+- Visual Studio Code
+- XAMPP
+- Git & GitHub
+- Postman
 
 ---
 
-# 👥 User Roles
+# 👥 System Roles
 
-## 1. Administrator (Role ID: 1)
+## Administrator (Role ID = 1)
 
-The administrator has full system access.
+The Administrator has full access to the system and can:
 
-### Permissions
-
-* Manage Users
-* Manage Categories
-* Manage Products
-* Manage Orders
-* Update Order Status
-* View Reports
-* Manage Staff Accounts
-* Manage Customer Accounts
+- Manage Users
+- Manage Categories
+- Manage Products
+- Manage Orders
+- Verify Payments
+- View Reports
+- Manage Roles & Permissions
+- View Dashboard Analytics
 
 ---
 
-## 2. Staff (Role ID: 2)
+## Staff (Role ID = 2)
 
-Staff members assist with daily operations.
+The Staff can:
 
-### Permissions
+- Manage Categories
+- Manage Products
+- Manage Orders
+- Verify Payments
+- View Dashboard
 
-* Manage Categories
-* Manage Products
-* Manage Orders
-* Update Order Status
-
-### Restrictions
-
-* Cannot Access Reports
-* Cannot Manage Users
+**Note:**
+Staff members cannot access Reports.
 
 ---
 
-## 3. Customer (Role ID: 3)
+## Customer (Role ID = 3)
 
-Customers can use the shopping platform.
+Customers can:
 
-### Permissions
-
-* Register Account
-* Login
-* Update Profile
-* Browse Products
-* Search Products
-* Add Products to Cart
-* Place Orders
-* View Order History
-
----
-
-# ✨ Core Features
-
-## Authentication Module
-
-* User Registration
-* User Login
-* Secure Authentication
-* Role-Based Authorization
-* Profile Management
+- Register Account
+- Login
+- Browse Products
+- Search Products
+- Add Products to Cart
+- Place Orders
+- Upload Payment Proof
+- Track Orders
+- View Order History
+- Manage Profile
 
 ---
 
-## Category Management
+# ⚙️ Main Features
 
-* Create Categories
-* Update Categories
-* Delete Categories
-* View Categories
+## Authentication
 
----
+- User Registration
+- User Login
+- JWT Authentication
+- Protected Routes
+- Role-Based Access Control
 
-## Product Management
+## Categories
 
-* Add Products
-* Edit Products
-* Delete Products
-* Upload Product Images
-* Product Stock Management
+- Create Category
+- Update Category
+- Delete Category
+- View Categories
 
----
+## Products
+
+- Create Product
+- Update Product
+- Delete Product
+- Product Images
+- Product Stock Management
 
 ## Shopping Cart
 
-* Add To Cart
-* Update Cart Quantity
-* Remove Cart Items
-* View Cart Summary
+- Add to Cart
+- Remove from Cart
+- Update Quantity
+
+## Orders
+
+- Create Orders
+- View Orders
+- Update Order Status
+
+Order Statuses:
+
+- Pending
+- Paid
+- Processing
+- Shipped
+- Delivered
+- Cancelled
+
+## Payment Management
+
+Manual Payment Verification
+
+Customers upload:
+
+- Receipt Screenshot
+- Transaction Information
+
+Admin/Staff can:
+
+- Approve Payment
+- Reject Payment
+
+## Reports Dashboard
+
+Admin Only
+
+Reports include:
+
+- Total Users
+- Total Categories
+- Total Products
+- Total Orders
+- Total Revenue
+- Orders by Status
+- Revenue Analytics
+- Recent Orders
 
 ---
 
-## Order Management
+# 🧱 System Architecture
 
-* Place Orders
-* View Orders
-* Update Order Status
-
-### Order Status Options
+The project follows a layered architecture.
 
 ```text
-Pending
-Paid
-Processing
-Shipped
-Delivered
-Cancelled
-```
-
----
-
-## Manual Payment Verification
-
-The system currently supports manual payment verification.
-
-### Process
-
-1. Customer places order.
-2. Customer sends payment manually.
-3. Administrator verifies payment.
-4. Order status is updated accordingly.
-
----
-
-## Dashboard System
-
-### Admin Dashboard
-
-* Revenue Statistics
-* Sales Reports
-* Order Reports
-* Product Reports
-* User Statistics
-
-### Staff Dashboard
-
-* Product Statistics
-* Category Statistics
-* Order Statistics
-
----
-
-## Reports Module
-
-The reporting module provides:
-
-* Total Revenue
-* Total Orders
-* Total Products
-* Total Categories
-* Order Status Analysis
-* Sales Overview
-* Product Performance Reports
-
----
-
-# 🗄 Database Design
-
-Main Tables:
-
-* users
-* roles
-* categories
-* products
-* cart_items
-* orders
-* order_items
-* payments
-
-The database follows relational database principles and supports role-based access control and order processing workflows.
-
----
-
-# 🏗 System Architecture
-
-```text
-Customer / Admin / Staff
-          │
-          ▼
-React Frontend (Redux + Tailwind)
-          │
-          ▼
-PHP REST API (MVC Architecture)
-          │
-          ▼
+Frontend (React + Redux)
+        ↓
+REST API (PHP MVC)
+        ↓
 MySQL Database
 ```
+
+### Backend Structure
+
+```text
+backend/
+│
+├── app/
+│   ├── controllers/
+│   ├── models/
+│   ├── middleware/
+│   ├── services/
+│   └── helpers/
+│
+├── routes/
+├── config/
+├── public/
+└── storage/
+```
+
+### Frontend Structure
+
+```text
+frontend/
+│
+├── src/
+│   ├── pages/
+│   ├── components/
+│   ├── layouts/
+│   ├── features/
+│   ├── redux/
+│   ├── routes/
+│   └── api/
+```
+
+---
+
+# 🗄 Database Tables
+
+Main tables used in the system:
+
+- users
+- roles
+- permissions
+- role_permissions
+- categories
+- products
+- carts
+- cart_items
+- orders
+- order_items
+- payments
 
 ---
 
@@ -249,33 +251,32 @@ MySQL Database
 ## Step 1: Clone Repository
 
 ```bash
-git clone https://github.com/your-username/online-shopping-system.git
+git clone https://github.com/tubeec1/online-shopping-system.git
 ```
 
 ---
 
 ## Step 2: Move Project
 
-Place project inside:
+Copy project folder into:
 
 ```text
-C:\xampp\htdocs\online-shopping-system
+xampp/htdocs/
+```
+
+Example:
+
+```text
+xampp/htdocs/online-shopping-system
 ```
 
 ---
 
-## Step 3: Start XAMPP
+## Step 3: Create Database
 
-Enable:
+Open phpMyAdmin
 
-* Apache
-* MySQL
-
----
-
-## Step 4: Create Database
-
-Create:
+Create database:
 
 ```sql
 oss
@@ -289,34 +290,54 @@ database.sql
 
 ---
 
-## Step 5: Configure Database Connection
+## Step 4: Configure Backend
 
-Update:
+Update database connection settings inside:
 
 ```text
 backend/config/database.php
 ```
 
----
+Example:
 
-## Step 6: Install Frontend Packages
-
-Navigate to frontend folder:
-
-```bash
-cd frontend
-npm install
+```php
+$host = "localhost";
+$user = "root";
+$password = "";
+$database = "oss";
 ```
 
 ---
 
-## Step 7: Run Frontend
+## Step 5: Install Frontend Packages
+
+Open terminal:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+or
+
+```bash
+npm install axios react-redux @reduxjs/toolkit react-router-dom react-icons react-hot-toast recharts
+```
+
+---
+
+## Step 6: Run Frontend
 
 ```bash
 npm run dev
 ```
 
-Open:
+Default:
 
 ```text
 http://localhost:5173
@@ -324,111 +345,126 @@ http://localhost:5173
 
 ---
 
-# 📸 System Screenshots
+## Step 7: Run Backend
 
-The following screenshots should be included in the project report and GitHub repository:
+Start:
 
-### Home Page
+- Apache
+- MySQL
 
-* Product Listings
-* Category Navigation
+from XAMPP Control Panel
 
-### Customer Dashboard
+Backend URL:
 
-* Shopping Cart
-* Order History
+```text
+http://localhost/online-shopping-system/backend
+```
 
-### Login Page
+API URL:
 
-* Authentication Form
-
-### Registration Page
-
-* Customer Signup
-
-### Admin Dashboard
-
-* Statistics Cards
-* Reports Charts
-
-### Category Management
-
-* Create / Update / Delete Categories
-
-### Product Management
-
-* Product Listing
-* Product Creation Form
-
-### Orders Management
-
-* Order List
-* Status Update Modal
-
-### Reports Dashboard
-
-* Revenue Chart
-* Order Statistics
-* Sales Analytics
-
-### User Management
-
-* Staff Accounts
-* Customer Accounts
+```text
+http://localhost/online-shopping-system/backend/api
+```
 
 ---
 
-# 📚 Academic Information
+# 📸 System Screenshots
 
-### Project Title
+All screenshots are located inside:
 
-**Design and Implementation of a Role-Based Online Shopping System for MIRO Market**
+```text
+screenshots/
+```
 
-### Institution
+## Authentication
 
-Bachelor Degree Final Year Project
+### Sign In
 
-### Location
+![Sign In](screenshots/signin.png)
 
-Mogadishu, Somalia
+### Sign Up
 
-### Academic Year
+![Sign Up](screenshots/signup.png)
 
-2025–2026
+---
+
+## Dashboard
+
+### Admin Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+## Category Management
+
+### Category Form
+
+![Category Form](screenshots/categoryForm.png)
+
+---
+
+## Product Management
+
+### Product Form
+
+![Product Form](screenshots/productForm.png)
+
+---
+
+## Order Management
+
+### Orders Page
+
+![Orders](screenshots/orderForm.png)
+
+---
+
+## Reports
+
+### Reports Dashboard
+
+![Reports 1](screenshots/reports1.png)
+
+### Reports Analytics
+
+![Reports 2](screenshots/report2.png)
+
+---
+
+# 🔒 Security Features
+
+- JWT Authentication
+- Password Hashing
+- Protected Routes
+- Middleware Authorization
+- Role-Based Access Control
+- API Validation
+- Input Sanitization
+
+---
+
+# 🎓 Academic Purpose
+
+This project was developed as a Final Year Project requirement for obtaining a Bachelor's Degree in Information Technology.
 
 ---
 
 # 👨‍💻 Author
 
-**Mohamed Suleyman Ibrahim**
+### Mohamed Suleyman Ibrahim
 
 Full Stack Developer
 
-* HTML
-* CSS
-* JavaScript
-* React.js
-* Node.js
-* Express.js
-* PHP
-* MySQL
+Mogadishu, Somalia
+
+GitHub:
+https://github.com/tubeec1
 
 ---
 
 # 📄 License
 
-This project was developed for academic and educational purposes. Commercial use requires permission from the author.
+This project is provided for educational and academic purposes.
 
----
-
-# ⭐ Future Enhancements
-
-* EVC Plus Integration
-* Sahal Payment Integration
-* SMS Notifications
-* Email Notifications
-* Mobile Application (Android & iOS)
-* Product Recommendation System
-* AI-Based Sales Analytics
-* Inventory Forecasting
-* Customer Reviews and Ratings
+Students may use, learn from, and extend the project for research and educational activities.
